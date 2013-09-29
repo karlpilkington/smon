@@ -1,0 +1,12 @@
+# views/posts/index.erb
+<h1> This is list of know machines </h1>
+<ul>
+<% @machines.each do |mach| %>
+  <li>
+    <h2><a href="/machines/<%= mach.id %>"><%= mach.machine_id %></a>
+    <span><%= mach.version %> </span>
+    <span><%= mach.json %></span>
+    </h2>
+  </li>
+<% end %>
+</ul>
