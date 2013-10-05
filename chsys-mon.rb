@@ -14,13 +14,12 @@ require './app/model/machine.rb'
 require './app/helpers/helpers.rb'
 
 get '/' do
-  logger.info("Machine: #{Machine.first.machine_id}")
   @machines = Machine.all().to_a
   erb :index
 end
 
 get '/machines/:id' do
-  @mach= Machine.where(machine_id: params[:id]).first
+  @mach= Machine.where('monit.id' =>  params[:id]).first
   erb :show_mach
 end
 
@@ -34,16 +33,13 @@ post '/collector' do
   #
   # If machine is already in MONGODB just fetch it and update values in it.
   ###
-  if not Machine.where(machine_id: parsed_json['monit']['id']).exists?
+  if not Machine.where('monit.id' => parsed_json['monit']['id']).exists?
     @machine = Machine.new()
-    @machine.machine_id = parsed_json['monit']['id']
   else
-    logger.info("Got machine WTF ?")
-    @machine = Machine.where(machine_id: parsed_json['monit']['id']).first
+    @machine = Machine.where('monit.id' => parsed_json['monit']['id']).first
   end
 
-  @machine.monit_json = json
-  @machine.version = parsed_json['monit']['platform']['version']
+  @machine.monit = parsed_json['monit']
   @machine.save
 
   content_type 'text/plain'
