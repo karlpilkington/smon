@@ -1,11 +1,13 @@
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader' if development?
-require "sinatra/activerecord"
+#require "sinatra/activerecord"
 require 'sinatra/logger'
 
 require 'active_support/core_ext'
 require 'json'
+
+require 'mongoid'
 
 require './config/environments.rb'
 require './app/model/machine.rb'
@@ -13,17 +15,13 @@ require './app/helpers/helpers.rb'
 
 get '/' do
   logger.info("Machine: #{Machine.first.machine_id}")
-  @machines = Machine.all()
+  @machines = Machine.all().to_a
   erb :index
 end
 
 get '/machines/:id' do
-  @mach= Machine.find(params[:id])
+  @mach= Machine.where(machine_id: params[:id]).first
   erb :show_mach
-end
-
-get '/collector' do
-  ""
 end
 
 post '/collector' do
@@ -34,20 +32,20 @@ post '/collector' do
   parsed_json = ActiveSupport::JSON.decode(json)
 
   #
-  # If machine is already in DB just fetch it and update values in it.
+  # If machine is already in MONGODB just fetch it and update values in it.
   ###
-  if not Machine.exists?(:machine_id => parsed_json['monit']['id'])
+  if not Machine.where(machine_id: parsed_json['monit']['id']).exists?
     @machine = Machine.new()
     @machine.machine_id = parsed_json['monit']['id']
   else
-    @machine = Machine.find_by(:machine_id => parsed_json['monit']['id'])
+    logger.info("Got machine WTF ?")
+    @machine = Machine.where(machine_id: parsed_json['monit']['id']).first
   end
 
-  @machine.json = json
+  @machine.monit_json = json
   @machine.version = parsed_json['monit']['platform']['version']
-  @machine.save!
+  @machine.save
 
   content_type 'text/plain'
   status 200
-  " "
 end

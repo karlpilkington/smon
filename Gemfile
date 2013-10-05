@@ -3,12 +3,17 @@ source 'https://rubygems.org'
 gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'sinatra-logger'
-gem 'activesupport'
+#gem 'activesupport'
 
 # DB support
-gem 'activerecord'
-gem 'sinatra-activerecord'
-gem 'pg'
+#gem 'activerecord'
+#gem 'sinatra-activerecord'
+#gem 'pg'
+
+# MongoDB
+gem 'mongo'
+gem 'bson_ext'
+gem "mongoid"
 
 # To parse/generate status messages
 gem 'json'
@@ -20,8 +25,8 @@ gem 'thin'
 
 group :development do
   gem 'pry'
-  gem 'sqlite3'
   gem 'tux'
+  gem 'shotgun'
 end
 
 group :test do

@@ -3,9 +3,9 @@
 <ul>
 <% @machines.each do |mach| %>
   <li>
-    <h2><a href="/machines/<%= mach.id %>"><%= mach.machine_id %></a>
+    <h2><a href="/machines/<%= mach.machine_id %>"><%= mach.machine_id %></a>
     <span><%= mach.version %> </span>
-    <span><%= mach.json %></span>
+    <span><%= mach.monit_json %></span>
     </h2>
   </li>
 <% end %>
