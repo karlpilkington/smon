@@ -22,8 +22,11 @@ get '/machines/:id' do
   erb :show_mach
 end
 
+get '/collector' do
+  ""
+end
+
 post '/collector' do
-  content_type :json
   protected!
   logger.info("Path: #{request.path_info}, Request: #{request.request_method}, Content Length: #{request.content_length}")
   json = Hash.from_xml(request.env["rack.input"].read).to_json
@@ -40,7 +43,11 @@ post '/collector' do
     @machine = Machine.find_by(:machine_id => parsed_json['monit']['id'])
   end
 
-    @machine.json = json
-    @machine.version = parsed_json['monit']['platform']['version']
-    @machine.save!
+  @machine.json = json
+  @machine.version = parsed_json['monit']['platform']['version']
+  @machine.save!
+
+  content_type 'text/plain'
+  status 200
+  " "
 end
