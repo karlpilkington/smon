@@ -39,6 +39,8 @@ post '/collector' do
     @machine = Machine.where('monit.id' => parsed_json['monit']['id']).first
   end
 
+  @machine.health_check_count = @@monit.HealthCheckCount
+  @machine.health_check_status = "Running"
   @machine.monit = parsed_json['monit']
   @machine.save
 

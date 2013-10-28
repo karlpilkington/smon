@@ -19,6 +19,13 @@ gem "mongoid"
 gem 'json'
 gem 'hpricot'
 
+# cron replacement
+#gem 'whenever'
+
+# Background job
+gem "resque"
+gem "resque-scheduler"
+
 gem 'rake'
 gem 'foreman'
 gem 'thin'

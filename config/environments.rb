@@ -1,5 +1,9 @@
+require File.expand_path(File.dirname(__FILE__) + "/../app/helpers/MonitSettings.rb")
+
 require 'sinatra/base'
 require 'mongoid'
+
+@@monit = MonitSettings.new
 
 configure :development do
   enable :logging
@@ -8,7 +12,7 @@ configure :development do
   set :database, "sqlite3:///db/chsys-mon.db"
 
   set :views, Proc.new { File.join(settings.root, '/app/views/')}
-  Mongoid.load!(File.join(settings.root, '/config/mongoid.yml'))
+  Mongoid.load!(File.expand_path(File.dirname(__FILE__) + '/mongoid.yml'))
 end
 
 configure :production do
@@ -18,5 +22,5 @@ configure :production do
   set :database, "sqlite3:///db/chsys-mon-production.db"
 
   set :views, Proc.new { File.join(settings.root, '/app/views/')}
-  Mongoid.load!(File.join(settings.root, '/config/mongoid.yml'))
+  Mongoid.load!(File.expand_path(File.dirname(__FILE__) + '/mongoid.yml'))
 end
